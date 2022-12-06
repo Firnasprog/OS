@@ -1,71 +1,257 @@
-import java.util.*; 
+1, Create a table with minimum constraints then insert & delete the rows 
+
+CREATE TABLE statement allows you to create and define a table. 
+Syntax
+The syntax for the CREATE TABLE statement in Oracle/PLSQL is: 
+CREATE TABLE table_name 
+( 
+ column1 datatype [ NULL | NOT NULL ], 
+ column2 datatype [ NULL | NOT NULL ], 
+ ... 
+ column_n datatype [ NULL | NOT NULL ] 
+); 
+Eg 
+CREATE TABLE Orders ( 
+ OrderID int NOT NULL PRIMARY KEY, 
+ OrderNumber int NOT NULL, 
+ PersonID int FOREIGN KEY REFERENCES Persons(PersonID) 
+); 
+NOT NULL PRIMRY KEY AND PersonID CONSTRAINTS 
+Insert 
+SYNTAX 
+1. INSERT INTO table 
+2. (column1, column2, ... column_n ) 
+3. VALUES 
+4. (expression1, expression2, ... expression_n ); 
  
-public class SJF { 
-public static void main(String args[]) 
-{ 
-Scanner sc = new Scanner(System.in); 
-System.out.println ("enter no of process:"); 
-int n = sc.nextInt(); 
-int pid[] = new int[n]; 
-int at[] = new int[n]; // at means arrival time 
-int bt[] = new int[n]; // bt means burst time 
-int ct[] = new int[n]; // ct means complete time 
-int ta[] = new int[n]; // ta means turn around time 
-int wt[] = new int[n]; //wt means waiting time 
-int f[] = new int[n]; // f means it is flag it checks process is completed or not 
-int st=0, tot=0; 
-float avgwt=0, avgta=0; 
- 
-for(int i=0;i<n;i++) 
-{ 
-System.out.println ("enter process " + (i+1) + " arrival time:"); 
-at[i] = sc.nextInt(); 
-System.out.println ("enter process " + (i+1) + " brust time:"); 
-bt[i] = sc.nextInt(); 
-pid[i] = i+1; 
-f[i] = 0; 
-} 
-boolean a = true; 
-while(true) 
-{ 
-int c=n, min=999; 
-if (tot == n) // total no of process = completed process loop will be terminated 
-break; 
-for (int i=0; i<n; i++) 
-{ 
-/* 
-* If i'th process arrival time <= system time and its flag=0 and burst<min 
-* That process will be executed first 
-*/ 
-if ((at[i] <= st) && (f[i] == 0) && (bt[i]<min)) 
-{ 
-min=bt[i]; 
-c=i; 
-} 
-} 
-/* If c==n means c value can not updated because no process arrival time< system time so we increase the 
-system time */ 
-if (c==n) 
-st++; 
-else 
-{ 
-ct[c]=st+bt[c]; 
-st+=bt[c]; 
-ta[c]=ct[c]-at[c]; 
-wt[c]=ta[c]-bt[c]; 
-f[c]=1; 
-tot++; 
-} 
-} 
-System.out.println("\npid arrival brust complete turn waiting"); 
-for(int i=0;i<n;i++) 
-{ 
-avgwt+= wt[i]; 
-avgta+= ta[i]; 
-System.out.println(pid[i]+"\t"+at[i]+"\t"+bt[i]+"\t"+ct[i]+"\t"+ta[i]+"\t"+wt[i]); 
-} 
-System.out.println ("\naverage tat is "+ (float)(avgta/n)); 
-System.out.println ("average wt is "+ (float)(avgwt/n)); 
-sc.close(); 
-} 
-}
+EX 
+ INSERT INTO suppliers 
+(supplier_id, supplier_name) 
+VALUES 
+(50, 'Flipkart') 
+DELETE 
+Syntax
+1. DELETE FROM table_name 
+2. WHERE conditions; 
+EX 
+1. DELETE FROM customers 
+2. WHERE name = 'Sohan'; 
+-
+-
+-
+1st over
+-
+-
+-
+2 Create a table with minimum 3 constraints and insert and update some rows in the table. 
+
+Table creation and insert done in ex 1 
+Update table method 
+Syntax:
+1. UPDATE table 
+2. SET column1 = expression1, 
+3. column2 = expression2, 
+4. ... 
+5. column_n = expression_n 
+6. WHERE conditions 
+Update Example: (Update single column) 
+1. UPDATE suppliers 
+2. SET supplier_name = 'Kingfisher' 
+3. WHERE supplier_id = 2; 
+-
+-
+-
+3 Create a table and perform comparative operators in SQL 
+
+r    Description     Operates on 
+=  Equal to. Any compatible data types
+>  Greater than. Any compatible data types
+<  Less than. Any compatible data types
+>=  Greater than equal to. Any compatible data types
+<=  Less than equal to. Any compatible data types
+<>  Not equal to. Any compatible data type
+CREATE TABLE MATHS( 
+ROLL_NUMBER INT, 
+S_NAME VARCHAR(10), 
+MARKS INT); 
+INSERT INTO MATHS VALUES(1,'ABHI',70); 
+INSERT INTO MATHS VALUES(2,'RAVI',80); 
+INSERT INTO MATHS VALUES(3,'ARJUN',90); 
+INSERT INTO MATHS VALUES(4,'SAM',100); 
+Equal to (=) Operator 
+SELECT * FROM MATHS WHERE MARKS=50; 
+Greater than (>) Operator: 
+SELECT * FROM MATHS WHERE MARKS>60; 
+Less than (<) Operator: 
+SELECT * FROM MATHS WHERE MARKS<40; 
+Greater than or equal to (>=) Operator 
+SELECT * FROM MATHS WHERE MARKS>=80; 
+Less than or equal to (<=) Operator 
+SELECT * FROM MATHS WHERE MARKS<=30; 
+Not equal to (<>) Operator: 
+SELECT * FROM MATHS WHERE MARKS<>70; 
+-
+-
+-
+4 Sub queries (Record)
+
+ A subquery is a query within another query. The outer query is called as main 
+query and inner query is called as subquery. 
+CREATE EMP TALE AND INSERT SOME ROWS AFTER THISONLY SUB QUERY 
+WILL EXEUTE 
+Syntax
+SELECT column_name FROM table_name 
+WHERE column_name expression operator 
+( SELECT column_name from table_name WHERE ... ); 
+EX 
+SELECT * FROM EMPLOYEE 
+WHERE ID IN (SELECT ID FROM EMPLOYEE WHERE SALARY > 4500); 
+-
+-
+-
+-
+5 Write a trigger event in RDBMS in SQL. (Before insertion data & before update) 
+
+A trigger is a PL/SQL block structure which is fired when DML statements like Insert, 
+Delete and Update is executed on a database table. A trigger is triggered automatically when an 
+associated DML statement is executed. 
+SYNTAX 
+CREATE [OR REPLACE ] TRIGGER trigger_name 
+{BEFORE | AFTER | INSTEAD OF } 
+{INSERT [OR] | UPDATE [OR] | DELETE} 
+[OF col_name] 
+ON table_name 
+[REFERENCING OLD AS o NEW AS n] 
+[FOR EACH ROW] 
+WHEN (condition) 
+BEGIN 
+-- SQL Statements 
+END; 
+PROGRAM; 
+SQL> create table cust(id number(10),name varchar2(15),age number(3),address var 
+char2(15),salary number(9,2)); 
+Table created. 
+SQL> insert into cust values(&id,'&name',&age,'&address',&salary); 
+Enter value for id: 1 
+Enter value for name: Ramesh 
+Enter value for age: 23 
+Enter value for address: chennai 
+Enter value for salary: 20000 
+old 1: insert into cust values(&id,'&name',&age,'&address',&salary) 
+new 1: insert into cust values(1,'Ramesh',23,'chennai',20000) 
+1 row created. 
+SQL> / 
+Enter value for id: 2 
+Enter value for name: Suresh 
+Enter value for age: 22 
+Enter value for address: kanpur 
+Enter value for salary: 22000 
+old 1: insert into cust values(&id,'&name',&age,'&address',&salary) 
+new 1: insert into cust values(2,'Suresh',22,'kanpur',22000) 
+1 row created. 
+SQL> / 
+Enter value for id: 3 
+Enter value for name: Mahesh 
+Enter value for age: 24 
+Enter value for address: bengalur 
+Enter value for salary: 24000 
+old 1: insert into cust values(&id,'&name',&age,'&address',&salary) 
+new 1: insert into cust values(3,'Mahesh',24,'bengalur',24000) 
+1 row created. 
+SQL> select * from cust; 
+ID NAME AGE ADDRESS SALARY 
+1 Ramesh 23 chennai 20000 
+2 Suresh 22 kanpur 22000 
+3 Mahesh 24 bengalur 24000 
+PROGRAM 
+SQL> CREATE OR REPLACE TRIGGER display_salary_changes 
+2 BEFORE DELETE OR INSERT OR UPDATE ON cust 
+3 FOR EACH ROW 
+4 WHEN (NEW.ID > 0) 
+5 DECLARE 
+6 sal_diff number; 
+7 BEGIN 
+8 sal_diff := :NEW.salary - :OLD.salary; 
+9 dbms_output.put_line('Old salary: ' || :OLD.salary); 
+10 dbms_output.put_line('New salary: ' || :NEW.salary); 
+11 dbms_output.put_line('Salary difference: ' || sal_diff); 
+12 END; 
+13 / 
+Trigger created. 
+PROGRAM 
+42 
+SQL> DECLARE 
+2 total_rows number(2); 
+3 BEGIN 
+4 UPDATE cust 
+5 SET salary = salary + 5000; 
+6 IF sql%notfound THEN 
+7 dbms_output.put_line('no customers updated'); 
+8 ELSIF sql%found THEN 
+9 total_rows := sql%rowcount; 
+10 dbms_output.put_line( total_rows || ' customers updated '); 
+11 END IF; 
+12 END; 
+13/ 
+-
+-
+-
+-
+6 Create a SQL table to perform inner join and outer join 
+
+JOIN: 
+SQL> create table univers(id number(10),name varchar(25)); 
+Table created. 
+SQL> create table instit(id number(10),name varchar(25),universityid number(10)); 
+Table created. 
+SQL> insert into univers values(&id,'&name'); 
+Enter value for id: 1 
+Enter value for name: srm university 
+old 1: insert into univers values(&id,'&name') 
+new 1: insert into univers values(1,'srm university') 
+1 row created. 
+SQL> / 
+Enter value for id: 2 
+Enter value for name: anna university 
+old 1: insert into univers values(&id,'&name') 
+new 1: insert into univers values(2,'anna university') 
+1 row created. 
+Inner join 
+SQL> select * from univers inner join instit on univers.id= instit.universityid; 
+ID NAME ID NAME UNIVERSITYID 
+------ ------------------------- ---------- ------------------------- --------------------- 
+1 srm university 1 valliamal 1 
+1 srm university 2 stella mary 1 
+2 anna university 3 kings eng 2 
+2 anna university 4 menakshi eng 2 
+Full outer join 
+SQL> select * from univers full outer join instit on univers.id= instit.universityid; 
+ID NAME ID NAME UNIVERSITYID 
+---------- ------------------------- ---------- ------------------------- ------------ 
+1 srm university 1 valliamal 1 
+1 srm university 2 stella mary 1 
+2 anna university 3 kings eng 2 
+2 anna university 4 menakshi eng 2 
+3 madras university <-------------Null values-------> 
+<------------Null values------->5 acs eng 4 
+6 rows selected. 
+left outer join 
+SQL> select * from univers left outer join instit on univers.id= instit.universityid; 
+ID NAME ID NAME UNIVERSITYID 
+-------- ------------------------- ---------- ------------------------- ------------ 
+1 srm university 1 valliamal 1 
+1 srm university 2 stella mary 1 
+2 anna university 3 kings eng 2 
+2 anna university 4 menakshi eng 2 
+3 madras university <----------Null value--------------> 
+right outer join 
+SQL> select * from univers right outer join instit on univers.id= instit.universityid; 
+ID NAME ID NAME UNIVERSITYID 
+------ ------------------------- ------ --------------------- ------------ 
+1 srm university 2 stella mary 1 
+1 srm university 1 valliamal 1 
+2 anna university 4 menakshi eng 2 
+2 anna university 3 kings eng 2 
+<-------Null value------> 5 acs eng 4
+
+
